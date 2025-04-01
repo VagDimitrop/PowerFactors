@@ -1,0 +1,14 @@
+<div class="sidebar">
+  <div class="sidebar-header">
+    <h2>Power Factors</h2>
+  </div>
+
+  <nav class="sidebar-nav">
+    <ul>
+      <li *ngFor="let item of menuItems" [routerLink]="item.route" routerLinkActive="active">
+        <mat-icon>{{item.icon}}</mat-icon>
+        <span>{{item.label}}</span>
+      </li>
+    </ul>
+  </nav>
+</div>
