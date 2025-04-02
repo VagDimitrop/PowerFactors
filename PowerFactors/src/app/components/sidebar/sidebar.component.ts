@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-sidebar',
@@ -7,8 +7,8 @@ import { Component } from '@angular/core';
 })
 export class SidebarComponent {
   menuItems = [
-    { icon: 'home', label: 'Home', route: '/home' },
-    { icon: 'analytics', label: 'Data Table', route: '/data_table' },
-    { icon: 'pie_chart', label: 'Chart', route: '/chart' }
+    {icon: 'home', label: 'Home', route: '/home'},
+    {icon: 'analytics', label: 'Data Table', route: '/table'},
+    {icon: 'pie_chart', label: 'Chart', route: '/chart'}
   ];
 }

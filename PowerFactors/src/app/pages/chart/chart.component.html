@@ -1,0 +1,19 @@
+<div class="chart-container">
+  <div class="chart-header">
+    <h1>Cryptocurrency Price Distribution</h1>
+    <p class="subtitle">Visual representation of cryptocurrency prices in the market</p>
+  </div>
+
+  <div class="chart-wrapper">
+    <highcharts-chart
+      [Highcharts]="Highcharts"
+      [options]="chartOptions"
+      style="width: 500px; height: 500px; display: block;">
+    </highcharts-chart>
+  </div>
+
+  <div class="loading-spinner" *ngIf="true">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading cryptocurrency data...</p>
+  </div>
+</div>

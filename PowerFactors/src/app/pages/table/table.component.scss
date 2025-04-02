@@ -6,8 +6,8 @@
 
 .table-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: center;
+
 
   h1 {
     color: #27391C;
@@ -75,6 +75,7 @@ table {
 .mat-mdc-row {
   &:hover {
     background-color: #1F7D53;
+
     .mat-mdc-cell {
       color: #FFF;
     }
@@ -123,6 +124,7 @@ table {
       height: 30px;
 
       padding: 0;
+
       &:hover {
         background-color: #71c8a1;
       }

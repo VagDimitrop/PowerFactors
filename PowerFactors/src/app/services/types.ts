@@ -1,12 +1,18 @@
 export interface CryptoData {
   id: string;
   name: string;
-  symbol: string;
   current_price: number;
   market_cap: number;
   total_volume: number;
-  high_24h: number;
-  low_24h: number;
   price_change_percentage_24h: number;
-  circulating_supply: number;
+  market_cap_rank: number;
+}
+
+export interface CategoryData {
+  name: string;
+  y: number;
+  marketCap: number;
+  volume24h: number;
+  priceChange24h: number;
+  rank: number;
 }
