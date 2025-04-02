@@ -5,6 +5,7 @@ import {ViewChild} from '@angular/core';
 import {CryptoData} from '../../services/types';
 import {CoinGeckoService} from '../../services/coingGecko/coinGecko.service';
 import {PageEvent} from "@angular/material/paginator";
+import {elementAt} from "rxjs";
 
 @Component({
   selector: 'app-table',
@@ -53,12 +54,24 @@ export class TableComponent implements OnInit {
 
   updateDataToBeRendered() {
     this.dataToBeRendered.data = this.dataSource.data.slice(this.pageIndex * this.pageSize, (this.pageIndex + 1) * this.pageSize);
-    debugger;
   }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.dataToBeRendered.filter = filterValue.trim().toLowerCase();
+  }
+
+  searchDataSet(event: Event) {
+    const searchValue = (event.target as HTMLInputElement).value;
+    if (searchValue !== '') {
+      this.dataSource.filter = searchValue.trim().toLowerCase();
+      this.dataToBeRendered.data = this.dataSource.data.filter(element =>
+        element.name.toLowerCase().includes(searchValue)
+      );
+    } else {
+      this.updateDataToBeRendered();
+    }
+
   }
 
   formatNumber(num: number, currency: string): string {

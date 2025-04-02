@@ -1,11 +1,23 @@
 <div class="table-container">
   <div class="table-header">
     <h1>Data Table</h1>
-    <mat-form-field appearance="outline">
-      <mat-label>Filter</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Search by name or symbol" #input>
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
+  </div>
+
+  <div class="inputs-wrapper">
+    <p class="subtitle">Easily search the entire dataset with the first input, and refine your results on the current page using the second input for a seamless, tailored browsing experience.</p>
+
+    <div class="inputs-container">
+      <mat-form-field  class="custom-input" appearance="outline">
+        <mat-label>Search</mat-label>
+        <input matInput (blur)="searchDataSet($event)" placeholder="Type to search">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Search by name or symbol" #input>
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </div>
   </div>
 
   <div class="table-wrapper">
