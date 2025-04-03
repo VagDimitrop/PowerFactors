@@ -92,9 +92,4 @@
 
     <mat-paginator [length]="totalRecords" [pageSize]="pageSize" [pageSizeOptions]="[20]" (page)="pageEvent($event)"></mat-paginator>
   </div>
-
-  <div class="loading-spinner" *ngIf="isLoading">
-    <mat-spinner diameter="50"></mat-spinner>
-    <p>Loading data...</p>
-  </div>
 </div>

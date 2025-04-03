@@ -19,6 +19,7 @@ import {TableComponent} from './pages/table/table.component';
 import {ServicesModule} from './services/services.module';
 import {ChartComponent} from './pages/chart/chart.component';
 import {HighchartsChartModule} from "highcharts-angular";
+import { LoadingModalComponent } from './components/loading-modal/loading-modal.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import {HighchartsChartModule} from "highcharts-angular";
     SidebarComponent,
     HomeComponent,
     TableComponent,
-    ChartComponent
+    ChartComponent,
+    LoadingModalComponent
   ],
   imports: [
     BrowserModule,

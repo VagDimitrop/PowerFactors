@@ -3,6 +3,7 @@ import * as Highcharts from 'highcharts';
 import {CoinGeckoService} from "../../services/coingGecko/coinGecko.service";
 import {MatTableDataSource} from "@angular/material/table";
 import {CategoryData, CryptoData} from "../../services/types";
+import {AppComponent} from "../../app.component";
 
 @Component({
   selector: 'app-chart',
@@ -47,7 +48,7 @@ export class ChartComponent implements OnInit {
   };
   Highcharts = Highcharts;
 
-  constructor(private coinGeckoService: CoinGeckoService) {
+  constructor(private coinGeckoService: CoinGeckoService, private appComponent: AppComponent) {
     this.dataSource = new MatTableDataSource<CryptoData>([]);
   }
 
@@ -56,16 +57,16 @@ export class ChartComponent implements OnInit {
   }
 
   fetchCryptoData() {
-    this.isLoading = true;
+    this.appComponent.isLoading = true;
     this.coinGeckoService.fetchCryptoData().subscribe({
       next: (data: CryptoData[]) => {
         this.dataSource.data = data;
         this.setUpChartOptions(this.chartSize);
-        this.isLoading = false;
+        this.appComponent.isLoading = false;
       },
       error: (error: any) => {
         console.error('Error fetching crypto data:', error);
-        this.isLoading = false;
+        this.appComponent.isLoading = false;
       }
     });
   }

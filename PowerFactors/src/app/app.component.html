@@ -3,4 +3,9 @@
   <main class="main-content">
     <router-outlet></router-outlet>
   </main>
+
+</div>
+
+<div class="modal-container" *ngIf="isLoading">
+  <app-loading-modal></app-loading-modal>
 </div>
