@@ -5,6 +5,7 @@ import {MatTableDataSource} from "@angular/material/table";
 import {CategoryData, CryptoData} from "../../services/types";
 import {AppComponent} from "../../app.component";
 import {Router} from "@angular/router";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-chart',
@@ -12,9 +13,9 @@ import {Router} from "@angular/router";
   styleUrls: ['./chart.component.scss']
 })
 export class ChartComponent implements OnInit {
-  dataSource: MatTableDataSource<CryptoData>;
+  dataSource: CryptoData[] = [];
   seriesData: CategoryData[] = [];
-  isLoading: boolean = true;
+  cryptoDataSubscription: Subscription | null = null;
   chartSize: number = 10;
   chartOptions: Highcharts.Options = {
     chart: {
@@ -51,17 +52,20 @@ export class ChartComponent implements OnInit {
   constructor(private coinGeckoService: CoinGeckoService,
               private appComponent: AppComponent,
               private router: Router) {
-    this.dataSource = new MatTableDataSource<CryptoData>([]);
   }
 
   ngOnInit() {
     this.fetchCryptoData();
   }
 
+  ngOnDestroy() {
+    this.cryptoDataSubscription?.unsubscribe()
+  }
+
   fetchCryptoData() {
-    this.coinGeckoService.fetchCryptoData().subscribe({
+    this.cryptoDataSubscription = this.coinGeckoService.fetchCryptoData().subscribe({
       next: (data: CryptoData[]) => {
-        this.dataSource.data = data;
+        this.dataSource = data;
         this.setUpChartOptions(this.chartSize);
       },
       error: (error: any) => {
@@ -71,11 +75,11 @@ export class ChartComponent implements OnInit {
   }
 
   setUpChartOptions(numberOfEntries: number) {
-    if (this.dataSource.data && this.dataSource.data.length > 0) {
+    if (this.dataSource && this.dataSource.length > 0) {
       this.seriesData = [];  // Clear existing series data
 
-      for (let i = 0; i < numberOfEntries && i < this.dataSource.data.length; i++) {
-        const crypto = this.dataSource.data[i];
+      for (let i = 0; i < numberOfEntries && i < this.dataSource.length; i++) {
+        const crypto = this.dataSource[i];
         this.seriesData.push({
           name: crypto.name,
           y: crypto.market_cap,

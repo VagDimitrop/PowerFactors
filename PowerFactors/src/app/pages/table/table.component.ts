@@ -8,6 +8,7 @@ import {PageEvent} from "@angular/material/paginator";
 import {AppComponent} from "../../app.component";
 import {WindowSizeService} from "../../services/windowSize/window-size.service";
 import {Router} from "@angular/router";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-table',
@@ -18,7 +19,7 @@ export class TableComponent implements OnInit {
   displayedColumns: string[] =[];
   dataSource: MatTableDataSource<CryptoData>;
   dataToBeRendered: MatTableDataSource<CryptoData>;
-  isLoading: boolean = true;
+  cryptoDataSubscription: Subscription | null = null;
   totalRecords: number = 0;
   pageSize: number = 20;
   pageIndex: number = 0;
@@ -46,8 +47,12 @@ export class TableComponent implements OnInit {
     this.dataToBeRendered.sort = this.sort;
   }
 
+  ngOnDestroy() {
+    this.cryptoDataSubscription?.unsubscribe()
+  }
+
   fetchCryptoData() {
-    this.coinGeckoService.fetchCryptoData().subscribe({
+    this.cryptoDataSubscription = this.coinGeckoService.fetchCryptoData().subscribe({
       next: (data: CryptoData[]) => {
         this.dataSource.data = data;
         this.totalRecords = this.dataSource.data.length;
