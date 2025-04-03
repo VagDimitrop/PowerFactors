@@ -25,6 +25,7 @@ export class CoinGeckoService {
     if (this.dialogRef) {
       this.dialogRef.close();
     }
+    (document.activeElement as HTMLElement)?.blur();
   }
 
   fetchCryptoData(): Observable<CryptoData[]> {
