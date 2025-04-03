@@ -7,6 +7,7 @@ import {CoinGeckoService} from '../../services/coingGecko/coinGecko.service';
 import {PageEvent} from "@angular/material/paginator";
 import {AppComponent} from "../../app.component";
 import {WindowSizeService} from "../../services/windowSize/window-size.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-table',
@@ -25,7 +26,10 @@ export class TableComponent implements OnInit {
 
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private coinGeckoService: CoinGeckoService, private appComponent: AppComponent, private windowSizeService: WindowSizeService) {
+  constructor(private coinGeckoService: CoinGeckoService,
+              private appComponent: AppComponent,
+              private windowSizeService: WindowSizeService,
+              private router: Router) {
     this.dataSource = new MatTableDataSource<CryptoData>([]);
     this.dataToBeRendered = new MatTableDataSource<CryptoData>([]);
   }
@@ -50,7 +54,7 @@ export class TableComponent implements OnInit {
         this.updateDataToBeRendered();
       },
       error: (error: any) => {
-        console.error('Error fetching crypto data:', error);
+        this.router.navigate(['/error']);
       }
     });
   }

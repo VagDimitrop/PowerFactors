@@ -21,6 +21,7 @@ import {ChartComponent} from './pages/chart/chart.component';
 import {HighchartsChartModule} from "highcharts-angular";
 import {ModalDialogComponent} from './components/modal-dialog/modal-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
+import { ErrorPageComponent } from './pages/error-page/error-page.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import {MatDialogModule} from "@angular/material/dialog";
     HomeComponent,
     TableComponent,
     ChartComponent,
-    ModalDialogComponent
+    ModalDialogComponent,
+    ErrorPageComponent
   ],
   imports: [
     BrowserModule,

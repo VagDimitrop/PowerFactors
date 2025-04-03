@@ -1,0 +1,22 @@
+.error-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  h1 {
+    color: #27391C;
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0;
+    text-align: center;
+  }
+
+  .subtitle {
+    font-size: 1.2rem;
+    color: #18230F;
+    font-weight: 400;
+    text-align: center;
+    margin-top: 16px;
+  }
+}
