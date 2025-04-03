@@ -23,3 +23,18 @@ body {
   min-height: 100vh;
   transition: margin-left 0.3s ease;
 }
+
+.modal-container{
+  position: fixed;
+  top: 0;
+  right: 0;
+
+  height: 100vh;
+  width: 100vw;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: rgba(100, 100, 100, 0.2);
+}

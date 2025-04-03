@@ -2,16 +2,33 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CryptoData } from '../types';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalDialogComponent } from '../../components/modal-dialog/modal-dialog.component';
+import { finalize } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CoinGeckoService {
   private apiUrl = 'https://api.coingecko.com/api/v3';
+  private dialogRef: any;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private dialog: MatDialog) { }
+
+  openDialog(): void {
+    this.dialogRef = this.dialog.open(ModalDialogComponent, {
+      disableClose: true
+    });
+  }
+
+  closeDialog(): void {
+    if (this.dialogRef) {
+      this.dialogRef.close();
+    }
+  }
 
   fetchCryptoData(): Observable<CryptoData[]> {
+    this.openDialog();
     return this.http.get<CryptoData[]>(`${this.apiUrl}/coins/markets`, {
       params: {
         vs_currency: 'usd',
@@ -20,6 +37,8 @@ export class CoinGeckoService {
         page: '1',
         sparkline: 'false'
       }
-    });
+    }).pipe(
+      finalize(() => this.closeDialog())
+    );
   }
 }

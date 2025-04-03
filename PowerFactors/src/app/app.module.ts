@@ -19,6 +19,8 @@ import {TableComponent} from './pages/table/table.component';
 import {ServicesModule} from './services/services.module';
 import {ChartComponent} from './pages/chart/chart.component';
 import {HighchartsChartModule} from "highcharts-angular";
+import {ModalDialogComponent} from './components/modal-dialog/modal-dialog.component';
+import {MatDialogModule} from "@angular/material/dialog";
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import {HighchartsChartModule} from "highcharts-angular";
     SidebarComponent,
     HomeComponent,
     TableComponent,
-    ChartComponent
+    ChartComponent,
+    ModalDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +45,8 @@ import {HighchartsChartModule} from "highcharts-angular";
     MatInputModule,
     MatFormFieldModule,
     MatProgressSpinnerModule,
-    HighchartsChartModule
+    HighchartsChartModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]
