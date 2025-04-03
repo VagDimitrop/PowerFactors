@@ -1,7 +1,13 @@
 .table-container {
   padding: 24px;
   max-width: 1400px;
+  width: 80%;
+  display: block;
   margin: 0 auto;
+
+  @media (max-width: 768px) {
+    max-width: 700px;
+  }
 }
 
 .table-header {
@@ -31,7 +37,7 @@
     font-size: 1.2rem;
     color: #18230F;
     font-weight: 400;
-    width: 50%;
+    text-align: center;
   }
 }
 
@@ -43,13 +49,14 @@
 .table-wrapper {
   background: white;
   border-radius: 12px;
-  overflow: hidden;
   box-shadow: rgba(39, 147, 49, 0.2) 5px 5px;
   border: 2px solid rgba(49, 147, 49, 0.2);
+
+  margin: 0 auto;
+  overflow-x: auto;
 }
 
 table {
-  width: 100%;
 
   td {
     text-align: center;
@@ -137,4 +144,7 @@ table {
   --mdc-outlined-text-field-hover-outline-color: #1F7D53;
   --mdc-outlined-text-field-focus-outline-color: #1F7D53;
   --mdc-outlined-text-field-focus-label-text-color: #1F7D53;
+}
+::ng-deep .mat-sort-header-container {
+  justify-content: center;
 }

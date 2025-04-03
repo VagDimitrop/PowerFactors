@@ -18,13 +18,12 @@ export class ChartComponent implements OnInit {
   chartOptions: Highcharts.Options = {
     chart: {
       type: 'pie',
-      width: '500',
-      backgroundColor: ''
     },
     title: {
       text: 'Market Cap Distribution Pie Chart',
       style: {
-        color: '#18230F'
+        color: '#18230F',
+        textAlign: 'center'
       }
     },
     plotOptions: {
