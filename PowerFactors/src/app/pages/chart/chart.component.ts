@@ -22,7 +22,7 @@ export class ChartComponent implements OnInit {
       backgroundColor: ''
     },
     title: {
-      text: 'Price Distribution Pie Chart',
+      text: 'Market Cap Distribution Pie Chart',
       style: {
         color: '#18230F'
       }
@@ -76,8 +76,8 @@ export class ChartComponent implements OnInit {
         const crypto = this.dataSource.data[i];
         this.seriesData.push({
           name: crypto.name,
-          y: crypto.current_price,
-          marketCap: crypto.market_cap,
+          y: crypto.market_cap,
+          current_price: crypto.current_price,
           volume24h: crypto.total_volume,
           priceChange24h: crypto.price_change_percentage_24h,
           rank: crypto.market_cap_rank
@@ -101,8 +101,7 @@ export class ChartComponent implements OnInit {
               const point = this as any;
               return `
                 <div>
-                    <span><b>Price: </b>$${Highcharts.numberFormat(point.y, 2)}</span> <br>
-                    <span><b>Market Cap: </b>$${Highcharts.numberFormat(point.marketCap, 0)}</span> <br>
+                    <span><b>Price: </b>$${Highcharts.numberFormat(point.current_price, 2)}</span> <br>
                     <span><b>24h Volume: </b>$${Highcharts.numberFormat(point.volume24h, 0)}</span> <br>
                     <span><b>24h Change: </b>
                         <span style="color: ${point.priceChange24h >= 0 ? '#4caf50' : '#f44336'}">
