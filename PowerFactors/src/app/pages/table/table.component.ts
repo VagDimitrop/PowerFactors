@@ -8,7 +8,14 @@ import {PageEvent} from "@angular/material/paginator";
 import {AppComponent} from "../../app.component";
 import {WindowSizeService} from "../../services/windowSize/window-size.service";
 import {Router} from "@angular/router";
-import {Subscription} from "rxjs";
+import {map, Observable, Subscription} from "rxjs";
+import {Store} from "@ngrx/store";
+import {
+  selectCryptoData,
+  selectCryptoDataError,
+  selectCryptoDataLoading
+} from "../../state/cryptoData/cryptoData.selectors";
+import * as CryptoDataActions from '../../state/cryptoData/cryptoData.actions'
 
 @Component({
   selector: 'app-table',
@@ -16,13 +23,19 @@ import {Subscription} from "rxjs";
   styleUrls: ['./table.component.scss']
 })
 export class TableComponent implements OnInit {
-  displayedColumns: string[] =[];
+  cryptoData$: Observable<CryptoData[]>;
+  loading$: Observable<boolean>;
+  error$: Observable<any>;
+
+  cryptoDataSubscription: Subscription | null = null;
+  displayedColumns: string[] = [];
   dataSource: MatTableDataSource<CryptoData>;
   dataToBeRendered: MatTableDataSource<CryptoData>;
-  cryptoDataSubscription: Subscription | null = null;
-  totalRecords: number = 0;
+
   pageSize: number = 20;
   pageIndex: number = 0;
+  totalRecords: number = 0;
+
   isMobile: boolean = false;
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -30,17 +43,31 @@ export class TableComponent implements OnInit {
   constructor(private coinGeckoService: CoinGeckoService,
               private appComponent: AppComponent,
               private windowSizeService: WindowSizeService,
-              private router: Router) {
+              private router: Router,
+              private store: Store) {
+    this.cryptoData$ = this.store.select(selectCryptoData).pipe(
+      map(data => data ?? []));
+    this.loading$ = this.store.select(selectCryptoDataLoading);
+    this.error$ = this.store.select(selectCryptoDataError);
+
     this.dataSource = new MatTableDataSource<CryptoData>([]);
     this.dataToBeRendered = new MatTableDataSource<CryptoData>([]);
   }
 
-  ngOnInit() {
-    this.fetchCryptoData();
+  ngOnInit(): void {
+    this.store.dispatch(CryptoDataActions.loadCryptoData());
+
+    this.cryptoDataSubscription = this.cryptoData$.subscribe(data => {
+      this.dataSource.data = data;
+      this.totalRecords = this.dataSource.data.length;
+      this.updateDataToBeRendered();
+    });
+
     this.windowSizeService.isMobile$.subscribe(isMobile => {
       this.isMobile = isMobile;
-      this.setDisplayedColumns();
     });
+
+    this.setDisplayedColumns();
   }
 
   ngAfterViewInit() {
@@ -49,19 +76,6 @@ export class TableComponent implements OnInit {
 
   ngOnDestroy() {
     this.cryptoDataSubscription?.unsubscribe()
-  }
-
-  fetchCryptoData() {
-    this.cryptoDataSubscription = this.coinGeckoService.fetchCryptoData().subscribe({
-      next: (data: CryptoData[]) => {
-        this.dataSource.data = data;
-        this.totalRecords = this.dataSource.data.length;
-        this.updateDataToBeRendered();
-      },
-      error: (error: any) => {
-        this.router.navigate(['/error']);
-      }
-    });
   }
 
   updateDataToBeRendered() {
@@ -83,7 +97,6 @@ export class TableComponent implements OnInit {
     } else {
       this.updateDataToBeRendered();
     }
-
   }
 
   formatNumber(num: number, currency: string): string {
@@ -113,7 +126,8 @@ export class TableComponent implements OnInit {
     window.scrollTo({
       top: 0,
       left: 0,
-      behavior: 'smooth'});
+      behavior: 'smooth'
+    });
   }
 
   setDisplayedColumns() {

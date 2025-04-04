@@ -1,11 +1,17 @@
 import {Component, OnInit} from '@angular/core';
 import * as Highcharts from 'highcharts';
 import {CoinGeckoService} from "../../services/coingGecko/coinGecko.service";
-import {MatTableDataSource} from "@angular/material/table";
 import {CategoryData, CryptoData} from "../../services/types";
 import {AppComponent} from "../../app.component";
 import {Router} from "@angular/router";
-import {Subscription} from "rxjs";
+import {map, Observable, Subscription} from "rxjs";
+import {Store} from "@ngrx/store";
+import {
+  selectCryptoData,
+  selectCryptoDataError,
+  selectCryptoDataLoading
+} from "../../state/cryptoData/cryptoData.selectors";
+import * as CryptoDataActions from '../../state/cryptoData/cryptoData.actions'
 
 @Component({
   selector: 'app-chart',
@@ -13,6 +19,10 @@ import {Subscription} from "rxjs";
   styleUrls: ['./chart.component.scss']
 })
 export class ChartComponent implements OnInit {
+  cryptoData$: Observable<CryptoData[]>;
+  loading$: Observable<boolean>;
+  error$: Observable<any>;
+
   dataSource: CryptoData[] = [];
   seriesData: CategoryData[] = [];
   cryptoDataSubscription: Subscription | null = null;
@@ -51,28 +61,27 @@ export class ChartComponent implements OnInit {
 
   constructor(private coinGeckoService: CoinGeckoService,
               private appComponent: AppComponent,
-              private router: Router) {
+              private router: Router,
+              private store: Store) {
+    this.cryptoData$ = this.store.select(selectCryptoData).pipe(
+      map(data => data ?? []));
+    this.loading$ = this.store.select(selectCryptoDataLoading);
+    this.error$ = this.store.select(selectCryptoDataError);
   }
 
   ngOnInit() {
-    this.fetchCryptoData();
+    this.store.dispatch(CryptoDataActions.loadCryptoData());
+
+    this.cryptoDataSubscription = this.cryptoData$.subscribe(data => {
+      this.dataSource = data;
+      this.setUpChartOptions(this.chartSize);
+    });
   }
 
   ngOnDestroy() {
     this.cryptoDataSubscription?.unsubscribe()
   }
 
-  fetchCryptoData() {
-    this.cryptoDataSubscription = this.coinGeckoService.fetchCryptoData().subscribe({
-      next: (data: CryptoData[]) => {
-        this.dataSource = data;
-        this.setUpChartOptions(this.chartSize);
-      },
-      error: (error: any) => {
-        this.router.navigate(['/error']);
-      }
-    });
-  }
 
   setUpChartOptions(numberOfEntries: number) {
     if (this.dataSource && this.dataSource.length > 0) {
@@ -103,7 +112,7 @@ export class ChartComponent implements OnInit {
           },
           tooltip: {
             headerFormat: '<span style="text-align: center"><b>{point.name}</b></span><br/>',
-            pointFormatter: function() {
+            pointFormatter: function () {
               const point = this as any;
               return `
                 <div>

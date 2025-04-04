@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {NgModule, isDevMode} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatIconModule} from '@angular/material/icon';
@@ -21,7 +21,12 @@ import {ChartComponent} from './pages/chart/chart.component';
 import {HighchartsChartModule} from "highcharts-angular";
 import {ModalDialogComponent} from './components/modal-dialog/modal-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
-import { ErrorPageComponent } from './pages/error-page/error-page.component';
+import {ErrorPageComponent} from './pages/error-page/error-page.component';
+import {StoreModule} from '@ngrx/store';
+import {EffectsModule} from '@ngrx/effects';
+import {StoreDevtoolsModule} from '@ngrx/store-devtools';
+import {cryptoDataReducer, AppState} from './state/cryptoData/cryptoData.reducers'
+import {CryptoDataEffects} from "./state/cryptoData/cryptoData.effects";
 
 @NgModule({
   declarations: [
@@ -48,7 +53,10 @@ import { ErrorPageComponent } from './pages/error-page/error-page.component';
     MatFormFieldModule,
     MatProgressSpinnerModule,
     HighchartsChartModule,
-    MatDialogModule
+    MatDialogModule,
+    StoreModule.forRoot({appState: cryptoDataReducer}),
+    EffectsModule.forRoot([CryptoDataEffects]),
+    StoreDevtoolsModule.instrument({maxAge: 25, logOnly: !isDevMode()})
   ],
   providers: [],
   bootstrap: [AppComponent]
