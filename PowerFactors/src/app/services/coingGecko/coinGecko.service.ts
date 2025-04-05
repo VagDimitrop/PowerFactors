@@ -29,7 +29,6 @@ export class CoinGeckoService {
   }
 
   fetchCryptoData(): Observable<CryptoData[]> {
-    this.openDialog();
     return this.http.get<CryptoData[]>(`${this.apiUrl}/coins/markets`, {
       params: {
         vs_currency: 'usd',
@@ -39,8 +38,6 @@ export class CoinGeckoService {
         sparkline: 'false'
       },
       headers: {'x-cgo-pro-api-key': 'CG-2k16PMqAJeUhcNRwNQ5TB7YQ'}
-    }).pipe(
-      finalize(() => this.closeDialog())
-    );
+    })
   }
 }
