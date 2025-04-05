@@ -28,6 +28,7 @@ export class TableComponent implements OnInit {
   error$: Observable<any>;
 
   cryptoDataSubscription: Subscription | null = null;
+  isMobileSubscription: Subscription | null = null;
   displayedColumns: string[] = [];
   dataSource: MatTableDataSource<CryptoData>;
   dataToBeRendered: MatTableDataSource<CryptoData>;
@@ -63,8 +64,9 @@ export class TableComponent implements OnInit {
       this.updateDataToBeRendered();
     });
 
-    this.windowSizeService.isMobile$.subscribe(isMobile => {
+    this.isMobileSubscription = this.windowSizeService.isMobile$.subscribe(isMobile => {
       this.isMobile = isMobile;
+      this.setDisplayedColumns();
     });
 
     this.setDisplayedColumns();
@@ -75,7 +77,8 @@ export class TableComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.cryptoDataSubscription?.unsubscribe()
+    this.cryptoDataSubscription?.unsubscribe();
+    this.isMobileSubscription?.unsubscribe();
   }
 
   updateDataToBeRendered() {
