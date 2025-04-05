@@ -16,6 +16,7 @@ import {Subscription} from "rxjs";
 })
 export class TableComponent implements OnInit {
   cryptoDataSubscription: Subscription | null = null;
+  isMobileSubscription: Subscription | null = null;
   displayedColumns: string[] = [];
   dataSource: MatTableDataSource<CryptoData>;
   dataToBeRendered: MatTableDataSource<CryptoData>;
@@ -37,8 +38,9 @@ export class TableComponent implements OnInit {
 
   ngOnInit() {
     this.fetchCryptoData();
-    this.windowSizeService.isMobile$.subscribe(isMobile => {
+    this.isMobileSubscription = this.windowSizeService.isMobile$.subscribe(isMobile => {
       this.isMobile = isMobile;
+      this.setDisplayedColumns();
     });
 
     this.setDisplayedColumns();
@@ -50,6 +52,7 @@ export class TableComponent implements OnInit {
 
   ngOnDestroy() {
     this.cryptoDataSubscription?.unsubscribe()
+    this.isMobileSubscription?.unsubscribe();
   }
 
   fetchCryptoData() {
