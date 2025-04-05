@@ -11,7 +11,7 @@ export interface CryptoData {
 export interface CategoryData {
   name: string;
   y: number;
-  marketCap: number;
+  current_price: number;
   volume24h: number;
   priceChange24h: number;
   rank: number;

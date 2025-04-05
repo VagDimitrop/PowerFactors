@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {WindowSizeService} from "../../services/windowSize/window-size.service";
 
 @Component({
   selector: 'app-sidebar',
@@ -11,4 +12,13 @@ export class SidebarComponent {
     {icon: 'analytics', label: 'Data Table', route: '/table'},
     {icon: 'pie_chart', label: 'Chart', route: '/chart'}
   ];
+  isMobile: boolean = false;
+
+  constructor( private windowSizeService: WindowSizeService) {
+  }
+  ngOnInit() {
+    this.windowSizeService.isMobile$.subscribe(isMobile => {
+      this.isMobile = isMobile;
+    });
+  }
 }

@@ -19,7 +19,9 @@ import {TableComponent} from './pages/table/table.component';
 import {ServicesModule} from './services/services.module';
 import {ChartComponent} from './pages/chart/chart.component';
 import {HighchartsChartModule} from "highcharts-angular";
-import { LoadingModalComponent } from './components/loading-modal/loading-modal.component';
+import {ModalDialogComponent} from './components/modal-dialog/modal-dialog.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import {ErrorPageComponent} from './pages/error-page/error-page.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,8 @@ import { LoadingModalComponent } from './components/loading-modal/loading-modal.
     HomeComponent,
     TableComponent,
     ChartComponent,
-    LoadingModalComponent
+    ModalDialogComponent,
+    ErrorPageComponent
   ],
   imports: [
     BrowserModule,
@@ -44,7 +47,8 @@ import { LoadingModalComponent } from './components/loading-modal/loading-modal.
     MatInputModule,
     MatFormFieldModule,
     MatProgressSpinnerModule,
-    HighchartsChartModule
+    HighchartsChartModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

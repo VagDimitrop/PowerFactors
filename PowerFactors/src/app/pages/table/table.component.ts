@@ -6,6 +6,8 @@ import {CryptoData} from '../../services/types';
 import {CoinGeckoService} from '../../services/coingGecko/coinGecko.service';
 import {PageEvent} from "@angular/material/paginator";
 import {AppComponent} from "../../app.component";
+import {WindowSizeService} from "../../services/windowSize/window-size.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-table',
@@ -13,33 +15,46 @@ import {AppComponent} from "../../app.component";
   styleUrls: ['./table.component.scss']
 })
 export class TableComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'name', 'symbol', 'current_price', 'market_cap', 'total_volume', 'high_24h', 'low_24h', 'price_change_percentage_24h', 'circulating_supply'];
+  cryptoDataSubscription: Subscription | null = null;
+  displayedColumns: string[] = [];
   dataSource: MatTableDataSource<CryptoData>;
   dataToBeRendered: MatTableDataSource<CryptoData>;
-  isLoading: boolean = true;
-  totalRecords: number = 0;
+
   pageSize: number = 20;
   pageIndex: number = 0;
+  totalRecords: number = 0;
+
+  isMobile: boolean = false;
 
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private coinGeckoService: CoinGeckoService, private appComponent: AppComponent) {
+  constructor(private coinGeckoService: CoinGeckoService,
+              private appComponent: AppComponent,
+              private windowSizeService: WindowSizeService) {
     this.dataSource = new MatTableDataSource<CryptoData>([]);
     this.dataToBeRendered = new MatTableDataSource<CryptoData>([]);
-
   }
 
   ngOnInit() {
     this.fetchCryptoData();
+    this.windowSizeService.isMobile$.subscribe(isMobile => {
+      this.isMobile = isMobile;
+    });
+
+    this.setDisplayedColumns();
   }
 
   ngAfterViewInit() {
     this.dataToBeRendered.sort = this.sort;
   }
 
+  ngOnDestroy() {
+    this.cryptoDataSubscription?.unsubscribe()
+  }
+
   fetchCryptoData() {
     this.appComponent.isLoading = true;
-    this.coinGeckoService.fetchCryptoData().subscribe({
+    this.cryptoDataSubscription = this.coinGeckoService.fetchCryptoData().subscribe({
       next: (data: CryptoData[]) => {
         this.dataSource.data = data;
         this.totalRecords = this.dataSource.data.length;
@@ -47,7 +62,6 @@ export class TableComponent implements OnInit {
         this.appComponent.isLoading = false;
       },
       error: (error: any) => {
-        console.error('Error fetching crypto data:', error);
         this.appComponent.isLoading = false;
       }
     });
@@ -102,6 +116,15 @@ export class TableComponent implements OnInit {
     window.scrollTo({
       top: 0,
       left: 0,
-      behavior: 'smooth'});
+      behavior: 'smooth'
+    });
+  }
+
+  setDisplayedColumns() {
+    if (!this.isMobile) {
+      this.displayedColumns = ['id', 'name', 'symbol', 'current_price', 'market_cap', 'total_volume', 'high_24h', 'low_24h', 'price_change_percentage_24h', 'circulating_supply'];
+    } else {
+      this.displayedColumns = ['name', 'symbol', 'current_price', 'price_change_percentage_24h'];
+    }
   }
 }
