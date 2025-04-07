@@ -35,8 +35,7 @@ export class CoinGeckoService {
         per_page: '250',
         page: '1',
         sparkline: 'false'
-      },
-      headers: {'x-cgo-pro-api-key': 'CG-2k16PMqAJeUhcNRwNQ5TB7YQ'}
+      }
     }).pipe(
       finalize(() => {
         this.dialogRef.close(); // Replace with your dialog close logic
